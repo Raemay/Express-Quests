@@ -69,5 +69,24 @@
         res.status(500).send("Error editing the user");
       });
   };
+
+  const deleteUser = (req, res) => {
+    const id = parseInt(req.params.id);
   
-  module.exports = {getUsers, getUsersById, postUser, updateUser};
+    database
+      .query("delete from users where id = ?", [id])
+      .then(([result]) => {
+        if (result.affectedRows === 0) {
+          res.status(404).send("Not Found");
+        } else {
+          res.sendStatus(204);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error deleting the user");
+      });
+  };
+  
+  
+  module.exports = {getUsers, getUsersById, postUser, updateUser, deleteUser};
